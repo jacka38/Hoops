@@ -1,0 +1,45 @@
+[
+    {
+      "gameid": 1,
+      "sport": "basketball",
+      "neededPlayers": 10,
+      "location": "tuira kenttä",
+      "description": "come play bball, we'll have great matches for a few hours"
+    },
+    {
+      "gameid": 2,
+      "sport": "soccer",
+      "neededPlayers": 22,
+      "location": "central park",
+      "description": "join us for a fun soccer game at central park!"
+    },
+    {
+      "gameid": 3,
+      "sport": "tennis",
+      "neededPlayers": 4,
+      "location": "community center",
+      "description": "looking for a tennis partner to play at the community center."
+    },
+    {
+      "gameid": 4,
+      "sport": "floorball",
+      "neededPlayers": 10,
+      "location": "tuira kenttä",
+      "description": "come play floorball, we'll have great matches for a few hours"
+    },
+    {
+      "gameid": 5,
+      "sport": "beachvolley",
+      "neededPlayers": 8,
+      "location": "central park",
+      "description": "join us for a fun beachvolley game at central park!"
+    },
+    {
+      "gameid": 6,
+      "sport": "soccer",
+      "neededPlayers": 14,
+      "location": "community center",
+      "description": "looking for a rugby partner to play at the community center."
+    }
+  ]
+  
