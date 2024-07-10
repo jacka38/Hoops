@@ -34,6 +34,11 @@ export default function HomeScreen({ navigation }) {
     ? games.filter((game) => isFavorite(game.gameid))
     : games;
 
+  // Sort games by start time
+  const sortedGames = filteredGames.sort(
+    (a, b) => new Date(a.time) - new Date(b.time)
+  );
+
   const Card = ({ game }) => {
     const [isFav, setIsFav] = useState(isFavorite(game.gameid));
     const [isExpanded, setIsExpanded] = useState(false);
@@ -60,15 +65,21 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.card}>
           <View style={styles.cardContent}>
             <View style={styles.cardTitleView}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: FontFamily.BOLD,
-                  color: Color.BLACK,
-                }}
-              >
+              <Text style={styles.title}>
                 {game.sport} at {game.location}
               </Text>
+              <Text style={styles.detailsText}>
+                Needed Players: {game.neededPlayers}
+              </Text>
+              <View style={styles.timeContainer}>
+                <Image
+                  source={require("../assets/time_icon.png")}
+                  style={styles.timeIcon}
+                />
+                <Text style={styles.detailsText}>
+                  {formatDateTime(game.time)}
+                </Text>
+              </View>
             </View>
             <View style={styles.separator}></View>
             <View style={styles.likeButtonContainer}>
@@ -87,9 +98,6 @@ export default function HomeScreen({ navigation }) {
           {isExpanded && (
             <View style={styles.expandedContent}>
               <Text style={styles.description}>{game.description}</Text>
-              <Text style={styles.detailsText}>
-                Needed Players: {game.neededPlayers}
-              </Text>
             </View>
           )}
         </View>
@@ -110,7 +118,7 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.list}>
-        {filteredGames.map((game) => (
+        {sortedGames.map((game) => (
           <Card key={game.gameid} game={game} />
         ))}
       </ScrollView>
@@ -142,45 +150,95 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: Color.LIGHTBLUE,
+    width: "95%",
     borderRadius: 15,
     marginBottom: 15,
     overflow: "hidden",
-    paddingBottom: 15,
+    alignSelf: "center",
   },
   cardContent: {
     flexDirection: "row",
-    paddingHorizontal: 15,
-    paddingTop: 15,
+    padding: 15,
+    alignItems: "center",
   },
   cardTitleView: {
     flex: 1,
   },
   separator: {
     width: 1,
-    backgroundColor: Color.BLACK,
-    marginVertical: 10,
+    height: "100%",
+    backgroundColor: Color.BROWN,
+    marginHorizontal: 10,
   },
   likeButtonContainer: {
-    alignItems: "center",
     justifyContent: "center",
-    marginTop: 15,
-    paddingHorizontal: 15,
+    alignItems: "center",
   },
   likeButton: {
     width: 40,
     height: 40,
   },
+  timeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 5,
+  },
+  timeIcon: {
+    width: 16,
+    height: 16,
+    marginRight: 5,
+  },
   expandedContent: {
     paddingHorizontal: 15,
     marginTop: 10,
   },
+  title: {
+    fontSize: 18,
+    fontFamily: FontFamily.BOLD,
+    color: Color.BLACK,
+  },
   description: {
     marginTop: 5,
+    fontSize: 16,
+    color: Color.BLACK,
+    fontFamily: FontFamily.REGULAR,
   },
   detailsText: {
-    marginTop: 5,
+    fontSize: 16,
+    color: Color.BLACK,
+    fontFamily: FontFamily.REGULAR,
   },
   list: {
     paddingVertical: 5,
   },
 });
+
+//timeutility
+const formatDateTime = (dateString) => {
+  const eventDate = new Date(dateString);
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+
+  const options = { hour: "2-digit", minute: "2-digit" };
+
+  if (
+    eventDate.getDate() === today.getDate() &&
+    eventDate.getMonth() === today.getMonth() &&
+    eventDate.getFullYear() === today.getFullYear()
+  ) {
+    return `Today | ${eventDate.toLocaleTimeString([], options)}`;
+  } else if (
+    eventDate.getDate() === tomorrow.getDate() &&
+    eventDate.getMonth() === tomorrow.getMonth() &&
+    eventDate.getFullYear() === tomorrow.getFullYear()
+  ) {
+    return `Tomorrow | ${eventDate.toLocaleTimeString([], options)}`;
+  } else {
+    const dateOptions = { year: "numeric", month: "2-digit", day: "2-digit" };
+    return `${eventDate.toLocaleDateString(
+      [],
+      dateOptions
+    )} at ${eventDate.toLocaleTimeString([], options)}`;
+  }
+};

@@ -4,42 +4,48 @@
       "sport": "basketball",
       "neededPlayers": 10,
       "location": "tuira kenttä",
-      "description": "come play bball, we'll have great matches for a few hours"
+      "description": "come play bball, we'll have great matches for a few hours",
+      "time": "2024-07-10T18:30:00Z"
     },
     {
       "gameid": 2,
       "sport": "soccer",
       "neededPlayers": 22,
       "location": "central park",
-      "description": "join us for a fun soccer game at central park!"
+      "description": "join us for a fun soccer game at central park!",
+      "time": "2024-07-10T17:00:00Z"
     },
     {
       "gameid": 3,
       "sport": "tennis",
       "neededPlayers": 4,
       "location": "community center",
-      "description": "looking for a tennis partner to play at the community center."
+      "description": "looking for a tennis partner to play at the community center.",
+      "time": "2024-07-11T15:00:00Z"
     },
     {
       "gameid": 4,
       "sport": "floorball",
       "neededPlayers": 10,
       "location": "tuira kenttä",
-      "description": "come play floorball, we'll have great matches for a few hours"
+      "description": "come play floorball, we'll have great matches for a few hours",
+      "time": "2024-07-11T13:00:00Z"
     },
     {
       "gameid": 5,
       "sport": "beachvolley",
       "neededPlayers": 8,
       "location": "central park",
-      "description": "join us for a fun beachvolley game at central park!"
+      "description": "join us for a fun beachvolley game at central park!",
+      "time": "2024-07-14T19:00:00Z"
     },
     {
       "gameid": 6,
       "sport": "soccer",
       "neededPlayers": 14,
       "location": "community center",
-      "description": "looking for a rugby partner to play at the community center."
+      "description": "looking for a rugby partner to play at the community center.",
+      "time": "2024-07-13T18:00:00Z"
     }
   ]
   
