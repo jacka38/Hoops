@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SplashScreen from "./app/screens/SplashScreen";
 import HomeScreen from "./app/screens/HomeScreen";
 import FavoritesScreen from "./app/screens/FavoritesScreen";
+import CreatePostScreen from "./app/screens/CreatePostScreen";
 
 import { useCustomFonts } from "./GlobalStyles";
 import { ActivityIndicator } from "react-native";
@@ -30,6 +31,7 @@ export default function App() {
           <Stack.Screen name="Splash" component={SplashScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Favorites" component={FavoritesScreen} />
+          <Stack.Screen name="Create" component={CreatePostScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </FavoritesProvider>

@@ -30,6 +30,10 @@ export default function HomeScreen({ navigation }) {
     setShowFavorites(!showFavorites);
   };
 
+  const navigateToCreatePostScreen = ({ navitagion }) => {
+    navigation.navigate("Create");
+  };
+
   const filteredGames = showFavorites
     ? games.filter((game) => isFavorite(game.gameid))
     : games;
@@ -122,6 +126,14 @@ export default function HomeScreen({ navigation }) {
           <Card key={game.gameid} game={game} />
         ))}
       </ScrollView>
+      <View style={styles.bottomBar}>
+        <TouchableOpacity
+          onPress={navigateToCreatePostScreen}
+          style={styles.createPostButton}
+        >
+          <Text style={styles.createPostButtonText}>Create post</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -132,11 +144,17 @@ const styles = StyleSheet.create({
     backgroundColor: Color.BACKGROUND,
   },
   topBar: {
-    height: 100,
+    height: 80,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 15,
+  },
+  bottomBar: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: -15,
   },
   filterButton: {
     padding: 10,
@@ -144,6 +162,16 @@ const styles = StyleSheet.create({
   },
   filterButtonText: {
     marginTop: 15,
+    fontSize: 18,
+    fontFamily: FontFamily.BOLD,
+    color: Color.BROWN,
+  },
+  createPostButton: {
+    padding: 10,
+    borderRadius: 5,
+  },
+  createPostButtonText: {
+    marginBottom: 15,
     fontSize: 18,
     fontFamily: FontFamily.BOLD,
     color: Color.BROWN,
