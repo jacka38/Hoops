@@ -109,31 +109,43 @@ export default function HomeScreen({ navigation }) {
     );
   };
 
+  const renderTopBar = () => (
+    <View style={styles.topBar}>
+      <TouchableOpacity
+        onPress={toggleShowFavorites}
+        style={styles.filterButton}
+      >
+        <Text style={styles.filterButtonText}>
+          {showFavorites ? "Show All" : "Show Liked"}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderCards = () => (
+    <ScrollView contentContainerStyle={styles.list}>
+      {sortedGames.map((game) => (
+        <Card key={game.gameid} game={game} />
+      ))}
+    </ScrollView>
+  );
+
+  const renderBottomBar = () => (
+    <View style={styles.bottomBar}>
+      <TouchableOpacity
+        onPress={navigateToCreatePostScreen}
+        style={styles.createPostButton}
+      >
+        <Text style={styles.createPostButtonText}>Create post</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.background}>
-      <View style={styles.topBar}>
-        <TouchableOpacity
-          onPress={toggleShowFavorites}
-          style={styles.filterButton}
-        >
-          <Text style={styles.filterButtonText}>
-            {showFavorites ? "Show All" : "Show Liked"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView contentContainerStyle={styles.list}>
-        {sortedGames.map((game) => (
-          <Card key={game.gameid} game={game} />
-        ))}
-      </ScrollView>
-      <View style={styles.bottomBar}>
-        <TouchableOpacity
-          onPress={navigateToCreatePostScreen}
-          style={styles.createPostButton}
-        >
-          <Text style={styles.createPostButtonText}>Create post</Text>
-        </TouchableOpacity>
-      </View>
+      {renderTopBar()}
+      {renderCards()}
+      {renderBottomBar()}
     </SafeAreaView>
   );
 }
