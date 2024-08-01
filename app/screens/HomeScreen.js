@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.BACKGROUND,
   },
   topBar: {
+    paddingTop: 20,
     height: 80,
     width: "100%",
     justifyContent: "center",
