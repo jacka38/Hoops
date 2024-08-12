@@ -6,7 +6,6 @@ import {
   Button,
   StyleSheet,
   TouchableOpacity,
-  Platform,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Color } from "../../GlobalStyles.js";
@@ -33,28 +32,52 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   const handleSubmit = async () => {
-    // Create a new game object
-    const newGame = {
-      gameid: Date.now(), // Unique ID based on timestamp
-      sport,
-      neededPlayers: parseInt(neededPlayers),
-      location,
-      description,
-      time: date.toISOString(),
-    };
-
     try {
-      const data = await require("../assets/sampleData.json");
-      data.push(newGame);
-      // Assuming you have some way to write to the JSON file in your environment
-      // writeFile function should be implemented to handle this
-      await writeFile(
-        "../assets/sampleData.json",
-        JSON.stringify(data, null, 2)
+      // Fetch existing games to determine the highest gameid
+      const response = await fetch(
+        "https://hoops-7fecd-default-rtdb.europe-west1.firebasedatabase.app/.json"
       );
-      navigation.goBack();
+      const data = await response.json();
+
+      // Find the highest gameid and determine the next gameid
+      const existingGameIds = Object.keys(data || {});
+      const highestGameId = existingGameIds.reduce((maxId, key) => {
+        const gameId = parseInt(data[key].gameid, 10);
+        return gameId > maxId ? gameId : maxId;
+      }, 0);
+
+      const newGameId = highestGameId + 1;
+
+      // Create a new game object with the new gameid
+      const newGame = {
+        gameid: newGameId,
+        sport,
+        neededPlayers: parseInt(neededPlayers),
+        location,
+        description,
+        time: date.toISOString(),
+      };
+
+      // Send a POST request to add the new game to the Firebase database
+      const postResponse = await fetch(
+        "https://hoops-7fecd-default-rtdb.europe-west1.firebasedatabase.app/.json",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newGame),
+        }
+      );
+
+      if (postResponse.ok) {
+        // Go back to the previous screen if successful
+        navigation.goBack();
+      } else {
+        console.error("Failed to save data:", postResponse.statusText);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Error saving data:", error);
     }
   };
 

@@ -18,11 +18,25 @@ export default function HomeScreen({ navigation }) {
   const { isFavorite, addToFavorites } = useFavorites();
 
   useEffect(() => {
-    // Fetch the JSON data from local source
+    // Fetch the data from Firebase Realtime Database
     const fetchData = async () => {
-      const data = await require("../assets/sampleData.json");
-      setGames(data);
+      try {
+        const response = await fetch(
+          "https://hoops-7fecd-default-rtdb.europe-west1.firebasedatabase.app/.json"
+        );
+        const data = await response.json();
+
+        // Convert the fetched data into an array if it's an object
+        const gamesArray = data
+          ? Object.keys(data).map((key) => ({ gameid: key, ...data[key] }))
+          : [];
+
+        setGames(gamesArray);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
+
     fetchData();
   }, []);
 
@@ -30,7 +44,7 @@ export default function HomeScreen({ navigation }) {
     setShowFavorites(!showFavorites);
   };
 
-  const navigateToCreatePostScreen = ({ navitagion }) => {
+  const navigateToCreatePostScreen = () => {
     navigation.navigate("Create");
   };
 
@@ -150,6 +164,7 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
+//stylesheet for the HomeScreen
 const styles = StyleSheet.create({
   background: {
     flex: 1,
