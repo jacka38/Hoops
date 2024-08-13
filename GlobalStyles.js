@@ -48,9 +48,10 @@ export const Color = {
   GREEN: "#B6D9C9",
   MINT_GREEN: "#209C6E",
   LIGHTBLUE: "#DCF4FC",
-  
+  TEST: "#FCDCF4",
+
   BACKGROUND: "rgba(156, 110, 97, 0.2)", //Background Brown #9C6E61 hex code
-  
+
   WHITE: "#FFFFFF",
   BLACK: "#000000",
 };

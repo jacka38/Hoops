@@ -150,7 +150,10 @@ export default function HomeScreen({ navigation }) {
         onPress={navigateToCreatePostScreen}
         style={styles.createPostButton}
       >
-        <Text style={styles.createPostButtonText}>Create post</Text>
+        <Image
+          source={require("../assets/create_icon.png")}
+          style={styles.createIcon}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -179,10 +182,11 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   bottomBar: {
-    width: "100%",
+    position: "absolute",
+    right: 15,
+    bottom: -10, // Adjust this value to position the button higher or lower
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: -15,
   },
   filterButton: {
     padding: 10,
@@ -195,18 +199,15 @@ const styles = StyleSheet.create({
     color: Color.BROWN,
   },
   createPostButton: {
+    marginBottom: 30,
+    borderRadius: 25,
     padding: 10,
-    borderRadius: 5,
-  },
-  createPostButtonText: {
-    marginBottom: 15,
-    fontSize: 18,
-    fontFamily: FontFamily.BOLD,
-    color: Color.BROWN,
+    elevation: 5,
+    backgroundColor: Color.TEST,
   },
   card: {
     backgroundColor: Color.LIGHTBLUE,
-    width: "95%",
+    width: "90%",
     borderRadius: 15,
     marginBottom: 15,
     overflow: "hidden",
@@ -244,6 +245,10 @@ const styles = StyleSheet.create({
     height: 16,
     marginRight: 5,
   },
+  createIcon: {
+    width: 70,
+    height: 70,
+  },
   expandedContent: {
     paddingHorizontal: 15,
     marginTop: 10,
@@ -265,7 +270,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.REGULAR,
   },
   list: {
-    paddingVertical: 5,
+    paddingBottom: 100,
   },
 });
 
