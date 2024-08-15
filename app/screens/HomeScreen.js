@@ -15,10 +15,20 @@ import { Color, FontFamily } from "../../GlobalStyles";
 export default function HomeScreen({ navigation }) {
   const [games, setGames] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
+  const [coloredGames, setColoredGames] = useState([]);
   const { isFavorite, addToFavorites } = useFavorites();
 
+  const cardColors = [
+    //colors used for the cards randomly selected
+    Color.WEIRD_BLUE,
+    Color.SOFT_BEIGE,
+    Color.MUTED_CORAL,
+    Color.LIGHT_PEACH,
+    Color.LIGHT_GRASS,
+    Color.PURPLE,
+  ];
+
   useEffect(() => {
-    // Fetch the data from Firebase Realtime Database
     const fetchData = async () => {
       try {
         const response = await fetch(
@@ -26,7 +36,6 @@ export default function HomeScreen({ navigation }) {
         );
         const data = await response.json();
 
-        // Convert the fetched data into an array if it's an object
         const gamesArray = data
           ? Object.keys(data).map((key) => ({ gameid: key, ...data[key] }))
           : [];
@@ -40,6 +49,28 @@ export default function HomeScreen({ navigation }) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const assignColorsToCards = (cards) => {
+      let previousColor = null;
+      return cards.map((card) => {
+        const availableColors = cardColors.filter(
+          (color) => color !== previousColor
+        );
+        const assignedColor =
+          availableColors[Math.floor(Math.random() * availableColors.length)];
+        previousColor = assignedColor;
+        return { ...card, backgroundColor: assignedColor };
+      });
+    };
+
+    if (games.length > 0) {
+      const sortedGames = games.sort(
+        (a, b) => new Date(a.time) - new Date(b.time)
+      );
+      setColoredGames(assignColorsToCards(sortedGames));
+    }
+  }, [games]);
+
   const toggleShowFavorites = () => {
     setShowFavorites(!showFavorites);
   };
@@ -49,13 +80,8 @@ export default function HomeScreen({ navigation }) {
   };
 
   const filteredGames = showFavorites
-    ? games.filter((game) => isFavorite(game.gameid))
-    : games;
-
-  // Sort games by start time
-  const sortedGames = filteredGames.sort(
-    (a, b) => new Date(a.time) - new Date(b.time)
-  );
+    ? coloredGames.filter((game) => isFavorite(game.gameid))
+    : coloredGames;
 
   const Card = ({ game }) => {
     const [isFav, setIsFav] = useState(isFavorite(game.gameid));
@@ -80,7 +106,7 @@ export default function HomeScreen({ navigation }) {
         activeOpacity={0.9}
         onPress={toggleExpanded}
       >
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: game.backgroundColor }]}>
           <View style={styles.cardContent}>
             <View style={styles.cardTitleView}>
               <Text style={styles.title}>
@@ -129,16 +155,17 @@ export default function HomeScreen({ navigation }) {
         onPress={toggleShowFavorites}
         style={styles.filterButton}
       >
-        <Text style={styles.filterButtonText}>
-          {showFavorites ? "Show All" : "Show Liked"}
-        </Text>
+        <Image
+          source={require("../assets/Hoops_logo_full.png")}
+          style={styles.logo}
+        />
       </TouchableOpacity>
     </View>
   );
 
   const renderCards = () => (
     <ScrollView contentContainerStyle={styles.list}>
-      {sortedGames.map((game) => (
+      {filteredGames.map((game) => (
         <Card key={game.gameid} game={game} />
       ))}
     </ScrollView>
@@ -158,33 +185,54 @@ export default function HomeScreen({ navigation }) {
     </View>
   );
 
+  const renderBottomBarLeft = () => (
+    <View style={styles.bottomBarLeft}>
+      <TouchableOpacity
+        onPress={toggleShowFavorites}
+        style={styles.createPostButton}
+      >
+        <Image
+          source={require("../assets/liked.png")}
+          style={styles.createIcon}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.background}>
       {renderTopBar()}
       {renderCards()}
       {renderBottomBar()}
+      {renderBottomBarLeft()}
     </SafeAreaView>
   );
 }
 
-//stylesheet for the HomeScreen
 const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: Color.BACKGROUND,
   },
   topBar: {
-    paddingTop: 20,
-    height: 80,
+    paddingTop: 30,
+    height: 100, // Increased height to provide more space for the logo
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 15,
+    marginBottom: 5, // Increased margin to provide more space before the list
   },
   bottomBar: {
     position: "absolute",
     right: 15,
-    bottom: -10, // Adjust this value to position the button higher or lower
+    bottom: -10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bottomBarLeft: {
+    position: "absolute",
+    left: 15,
+    bottom: -10,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -192,26 +240,20 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
-  filterButtonText: {
-    marginTop: 15,
-    fontSize: 18,
-    fontFamily: FontFamily.BOLD,
-    color: Color.BROWN,
-  },
   createPostButton: {
     marginBottom: 30,
     borderRadius: 25,
     padding: 10,
     elevation: 5,
-    backgroundColor: Color.TEST,
+    backgroundColor: Color.LIGHT_PURPLE,
   },
   card: {
-    backgroundColor: Color.LIGHTBLUE,
     width: "90%",
     borderRadius: 15,
     marginBottom: 15,
     overflow: "hidden",
     alignSelf: "center",
+    elevation: 5,
   },
   cardContent: {
     flexDirection: "row",
@@ -246,8 +288,8 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   createIcon: {
-    width: 70,
-    height: 70,
+    width: 50,
+    height: 50,
   },
   expandedContent: {
     paddingHorizontal: 15,
@@ -270,7 +312,13 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.REGULAR,
   },
   list: {
-    paddingBottom: 100,
+    paddingBottom: 80,
+    paddingTop: 20, // Added padding to create space before the list starts
+  },
+  logo: {
+    width: 60, // Adjust width as needed
+    height: 70, // Adjust height as needed
+    marginTop: 15, // Added margin to ensure the logo is not too close to the top
   },
 });
 

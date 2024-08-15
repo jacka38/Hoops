@@ -46,9 +46,15 @@ export const FontFamily = {
 export const Color = {
   BROWN: "#362C24", // dark brown
   GREEN: "#B6D9C9",
+  LIGHT_PURPLE: "#FCDCF4",
   MINT_GREEN: "#209C6E",
   LIGHTBLUE: "#DCF4FC",
-  TEST: "#FCDCF4",
+  WEIRD_BLUE: "#DCECFC",
+  SOFT_BEIGE: "#F5E8C7",
+  MUTED_CORAL: "#D9A7A1",
+  LIGHT_PEACH: "#F9D5D3",
+  LIGHT_GRASS: "#d6edc7",
+  PURPLE: "#ebe4f7",
 
   BACKGROUND: "rgba(156, 110, 97, 0.2)", //Background Brown #9C6E61 hex code
 
